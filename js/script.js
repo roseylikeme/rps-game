@@ -3,6 +3,8 @@ let computerScore = 0;
 
 const container = document.querySelector('#container');
 const content = createDivWithClasses('content', 'text-center', 'mt-3', 'd-flex',);
+const displayChoices = createDivWithClasses('displayChoices', 'text-center', 'mt-3')
+const displayWinnerText = createDivWithClasses('displayWinnerText', 'text-center')
 const line = createDivWithClasses('line');
 const btnRock = createButton('Rock');
 const btnPaper = createButton('Paper');
@@ -24,6 +26,8 @@ appendElements(computerContainer, computerIcon, computerScoreDisplay);
 
 container.appendChild(scoreContainer);
 container.appendChild(content);
+container.appendChild(displayChoices);
+container.appendChild(displayWinnerText);
 
 function createDivWithClasses(...classes) {
     const div = document.createElement('div');
@@ -60,9 +64,15 @@ function getComputerChoice() {
 
 function playRound(playerSelection) {
   const computerSelection = getComputerChoice();
-  console.log(`Player: ${playerSelection}, Computer: ${computerSelection}`);
   const result = determineWinner(playerSelection, computerSelection);
-  console.log(result);
+  displayChoices.textContent = `${playerSelection.toUpperCase()} vs ${computerSelection.toUpperCase()}`;
+  displayWinnerText.textContent = `${result}`
+
+  if (playerScore === 5) {
+    showAlertAndReset('Congratulations! You are the winner!');
+  } else if (computerScore === 5) {
+    showAlertAndReset('Computer wins! Better luck next time.');
+  }
 }
 
 function determineWinner(playerSelection, computerSelection) {
@@ -86,11 +96,17 @@ function determineWinner(playerSelection, computerSelection) {
   }
 }
 
-function game() {
-    console.log(`Final score: You ${playerScore}, Computer ${computerScore}`);
-  
-    playAgain();
+function showAlertAndReset(message) {
+  alert(message);
+  resetGame();
 }
-  
-game();
+
+function resetGame() {
+  playerScore = 0;
+  computerScore = 0;
+  playerScoreDisplay.textContent = `Score: ${playerScore}`;
+  computerScoreDisplay.textContent = `Score: ${computerScore}`;
+  displayChoices.textContent = '';
+  displayWinnerText.textContent = '';
+}
   
